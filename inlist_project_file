@@ -93,6 +93,7 @@
 
 ! debugging_controls
 	report_hydro_solver_progress = .true.
-	
+	tiny_corr_coeff_limit = 50000	
+        steps_before_use_gold_tolerances = 10000000
 
 / ! end of controls namelist

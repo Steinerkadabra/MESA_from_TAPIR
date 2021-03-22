@@ -14,6 +14,8 @@ sed -i "s/<<end_time>>/$4/" inlist_project
 
 if (( $(echo "0.001 > $3" |bc -l) ));
 then
+	./clean
+	./mk
 	./rn
 else
 	./re

@@ -34,10 +34,15 @@ program hello
     end do
 
     do i = 1, nlines-2
+	ierr = 0
+	
+	if (time(i) > 205195.87628815800) then
+	 
         write(*,*) 'start_time', time(i), 'end_time', time(i+1), 'start_rate', rate(i), 'end_rate', rate(i+1)
         call start_MESA(rate(i), rate(i+1) , time(i), time(i+1), MESA_Teff, MESA_end_time, ierr)
         write(*,*) 'resulting MESA Teff:', MESA_Teff
-        if (ierr == 1) STOP "MESA has not reached end time"
+        end if
+	if (ierr == 1) STOP "MESA has not reached end time"
     end do
 end program
 
