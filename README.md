@@ -13,6 +13,14 @@ At every timestep MESA writes out information to *LOGS/history.data* that includ
 wanted information to *MESA_for_TAPIR.txt* in each timestep. In our case this includes the effective temperature and the time. After the MESA run has ended, `<start_MESA>` will read in the the informatin from this file.
 If the time does not match `<time_end>` and error is raised.
 
+For the `<rn_tapir>` file to work on your machine you will need to change the environmental variables set in the first few lines accordingly. This is how it is setup for my machine.:
+
+```
+export MESA_DIR=~/MESA/mesa-r12778 (Path to MESA installation)
+export OMP_NUM_THREADS=16 (Amount of course to run MESA on)
+export MESASDK_ROOT=~/mesasdk (Path to mesasdk installation)
+```
+
 
 This repository includes a MESA working directory and the subroutine to include MESA in TAPIR. Here is a breakdown of what files are doing what:
 
