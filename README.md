@@ -1,6 +1,8 @@
 # MESA_from_TAPIR
 Fortran Subroutine to use a standalone installation of MESA inside the TAPIR code.
 
+Before this subroutine is able to work, you have to install [MESA](http://mesa.sourceforge.net/prereqs.html) and should test it.
+
 # How this works
 The MESA working directory is set up to run a piecewise MESA calculation. This is steered by the programm `<hello>` in *MESA_from_TAPIR.f90* by the use of the `<start_MESA>` subroutine.
 The subroutine is fed the starting and end point of the calculation as well as the start and end accretion rate. It will then call *rn_tapir*, which starts the MESA run in one of two ways:
