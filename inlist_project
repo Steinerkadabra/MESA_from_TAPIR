@@ -32,6 +32,12 @@
 	pgstar_flag = .false.
 	show_log_description_at_start = .false.
 
+! set current stellar rotation
+
+new_omega = 1.2120342000000000E-005
+set_omega = .true.
+set_initial_omega = .true.
+
 	
 / !end of star_job namelist
 
@@ -59,11 +65,11 @@
 ! accretion controls	
 	accrete_same_as_surface = .false.
 	accretion_zfracs = 8
-	x_ctrl(3) = 1.0318569735605350E-007		! accretion rate at start
-	x_ctrl(4) = 1.0318569735605350E-007		! accretion rate at end
+	x_ctrl(3) = 1.0098961691250681E-007		! accretion rate at start
+	x_ctrl(4) = 1.0111249845128004E-007		! accretion rate at end
 	x_ctrl(5) = 0.01 				! control for linear change of energy
-	x_ctrl(6) = 19816.081751213467 		! age at start
-	x_ctrl(7) = 19826.074732429410 	! age at end
+	x_ctrl(6) = 9.9929812159422422 		! age at start
+	x_ctrl(7) = 19.985962431884484 	        ! age at end
 
 	use_other_energy = .true.
 	use_other_adjust_mdot = .true.
@@ -77,11 +83,12 @@
 	!conv_vel_corr_coeff_limit = 0.002d0
 	!newton_itermin_until_reduce_min_corr_coeff = 0
 	!corr_coeff_limit = 0.001d0
+	max_timestep = 8.000d7
 	scale_max_correction = 0.1
 
 ! time controls
 	varcontrol_target = 8d-5
-	max_age = 19826.074732429410 	! age at end
+	max_age = 19.985962431884484 	! age at end
 	num_adjusted_dt_steps_before_max_age = 5
 
 ! output options
@@ -93,6 +100,7 @@
 
 ! debugging_controls
 	report_hydro_solver_progress = .true.
-	
+	tiny_corr_coeff_limit = 50000	
+        steps_before_use_gold_tolerances = 10000000
 
 / ! end of controls namelist
