@@ -121,10 +121,11 @@ subroutine energy_routine(id, ierr)
          real(dp) :: xposk, dif, xpos, thingie, thingie2, Mstar, mass_dif
          integer :: k, xposk_orig
 
-            real(dp), parameter :: mdot_break = 6.2e-6
-            real(dp), parameter :: alpha_high = 0.2
+         ! values from jensen & haugbolle 2017
+            real(dp), parameter :: mdot_break = 3.5*1d-5
+            real(dp), parameter :: alpha_high = 0.5
             real(dp), parameter :: alpha_low = 0.005
-            real(dp), parameter :: delta_break = 5.95e-6
+            real(dp), parameter :: delta_break = 2/3*1d-5
             real(dp) :: numerator, denominator
 
 
@@ -134,8 +135,13 @@ subroutine energy_routine(id, ierr)
             mass = s% mstar
             mdot = s% mstar_dot
             mdot_msun = s% mstar_dot / Msun* secyer
-            alpha = 0.1
+            !numerator = alpha_high * exp(mdot_msun/delta_break) + alpha_low * exp(mdot_msun/delta_break)
+            !denominator = exp(mdot_msun/delta_break) + exp(mdot_msun/delta_break)
 
+            !alpha = numerator / denominator
+            !set constant alpha for now, should change that later on
+
+            alpha = 0.1
 
 
             mass = s% mstar

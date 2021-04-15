@@ -94,7 +94,7 @@
 	accretion_zfracs = 8
 	x_ctrl(3) = <<start_rate>>		! accretion rate at start
 	x_ctrl(4) = <<end_rate>>		! accretion rate at end
-	x_ctrl(5) = 0.01 				! control for linear change of energy
+	x_ctrl(5) = 0.005 				! control for linear change of energy
 	x_ctrl(6) = <<start_time>> 		! age at start
 	x_ctrl(7) = <<end_time>> 	        ! age at end
 
