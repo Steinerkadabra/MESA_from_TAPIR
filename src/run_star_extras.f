@@ -103,6 +103,8 @@
             s% mstar_dot = (s% x_ctrl(3)* (s% x_ctrl(7) - s% star_age)+ &
                             s% x_ctrl(4)* (s% star_age - s% x_ctrl(6) ))/&
                             (s% x_ctrl(7) - s% x_ctrl(6)) *Msun/secyer
+            else
+               s% mstar_dot = 0
             end if
 
 
@@ -200,6 +202,7 @@ subroutine energy_routine(id, ierr)
 
 
          s% hydro_save_photo = .false.
+
       end function extras_start_step
 
 
@@ -247,7 +250,7 @@ subroutine energy_routine(id, ierr)
          ierr = 0
          call star_ptr(id, s, ierr)
          if (ierr /= 0) return
-         how_many_extra_history_columns = 0
+         how_many_extra_history_columns = 2
       end function how_many_extra_history_columns
       
       
@@ -256,14 +259,26 @@ subroutine energy_routine(id, ierr)
          character (len=maxlen_history_column_name) :: names(n)
          real(dp) :: vals(n)
          integer, intent(out) :: ierr
-         real(dp) :: max_temp
+         real(dp) :: summ, p_days
          integer :: max_pos, k
          type (star_info), pointer :: s
          ierr = 0
          call star_ptr(id, s, ierr)
          if (ierr /= 0) return
-         
+         summ = 0
+         do k = 1, s% nz
+            summ = summ + s% i_rot(k) * s% dm(k)
+         end do
 
+         p_days = 2 * pi / (s% omega(1) * 24 * 3600)
+
+         names(1) = 'log_moment_of_inertia'
+         vals(1) = safe_log(summ)
+         names(2) = 'p_surface_days'
+         vals(2) = p_days
+
+
+         write(*,*) p_days
          ! note: do NOT add the extras names to history_columns.list
          ! the history_columns.list is only for the built-in history column options.
          ! it must not include the new column names you are adding here.
@@ -391,6 +406,7 @@ subroutine energy_routine(id, ierr)
 
 
 
+         call star_set_uniform_omega(s% id, s% x_ctrl(8), ierr)
          ! to save a profile, 
             ! s% need_to_save_profiles_now = .true.
          ! to update the star log,

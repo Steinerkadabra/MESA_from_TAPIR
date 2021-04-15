@@ -9,14 +9,15 @@
 
   ! create model
   	load_saved_model = .true.
-	saved_model_name = 'initial_model_h2_birthline'
+	saved_model_name = 'model_0.940'
   	save_photo_when_terminate = .true.
 
-
+! Opacity controls
+	kappa_file_prefix = 'OP_a09_nans_removed_by_hand'
 
 
 ! set initial composition and nuclear reaction network
-  	set_uniform_initial_composition = .true.
+  	!set_uniform_initial_composition = .true.
   	initial_zfracs = 8 
 
 	change_net = .true.
@@ -32,11 +33,14 @@
 	pgstar_flag = .false.
 	show_log_description_at_start = .false.
 
-! set current stellar rotation
+! rotation controls
 
-new_omega = 1.2120342000000000E-005
-set_omega = .true.
-set_initial_omega = .true.
+	new_rotation_flag = .true.
+	change_initial_rotation_flag = .true.
+	relax_omega = .false.
+	relax_omega_max_yrs_dt = 1d0
+	num_steps_to_relax_rotation = 100
+	new_omega = 1.2120342000000000E-005
 
 	
 / !end of star_job namelist
@@ -55,40 +59,69 @@ set_initial_omega = .true.
 	x_ctrl(2) = 85			! he3 abundance in ppm	
 
 ! mesh controls
-	mesh_delta_coeff = 0.25
+	mesh_delta_coeff = 0.5
+	max_dq = 5d-4
 	max_allowed_nz = 100000
+	smooth_convective_bdy = .false.
 
 ! mixing controls
-	mixing_length_alpha = 1.8
+	set_min_D_mix = .true.
+	min_D_mix = 0d0
+	mixing_length_alpha = 1.8 !1.8   
+	overshoot_scheme(1) = 'exponential'
+	overshoot_zone_type(1) = 'any'
+	overshoot_zone_loc(1) = 'any'
+	overshoot_bdy_loc(1) = 'top'
+
+	overshoot_f(1) = 0.01d0
+	overshoot_f0(1) = 0.005d0
+
+	overshoot_scheme(2) = 'exponential'
+	overshoot_zone_type(2) = 'any'
+	overshoot_zone_loc(2) = 'any'
+	overshoot_bdy_loc(2) = 'bottom'
+
+	overshoot_f(2) = 0.005d0
+	overshoot_f0(2) = 0.0025d0
+
+! convective premixing
+	use_Ledoux_criterion = .true.
+	do_conv_premix = .true.
 
 
 ! accretion controls	
 	accrete_same_as_surface = .false.
 	accretion_zfracs = 8
-	x_ctrl(3) = 1.0098961691250681E-007		! accretion rate at start
-	x_ctrl(4) = 1.0111249845128004E-007		! accretion rate at end
+	x_ctrl(3) = 1.0138161277823444E-007		! accretion rate at start
+	x_ctrl(4) = 1.0138502302032980E-007		! accretion rate at end
 	x_ctrl(5) = 0.01 				! control for linear change of energy
-	x_ctrl(6) = 9.9929812159422422 		! age at start
-	x_ctrl(7) = 19.985962431884484 	        ! age at end
+	x_ctrl(6) = 79.943849727537938 		! age at start
+	x_ctrl(7) = 89.936830943480189 	        ! age at end
 
 	use_other_energy = .true.
 	use_other_adjust_mdot = .true.
 
+
+! rotation controls
+	x_ctrl(8)= 1.2120342000000000E-005
+	am_D_mix_factor = 1d30
+
 !convergence controls
-	!timestep_factor_for_retries = 0.9
-	!timestep_factor_for_backups = 0.9
-	!min_timestep_factor = 0.7
-	!max_timestep_factor = 1.1
+
+	tiny_corr_coeff_limit = 5000
+	timestep_factor_for_retries = 0.9
+	timestep_factor_for_backups = 0.9
+	min_timestep_factor = 0.7
+	max_timestep_factor = 1.1
 	!conv_vel_newton_itermin_until_reduce_min_corr_coeff = 3
 	!conv_vel_corr_coeff_limit = 0.002d0
-	!newton_itermin_until_reduce_min_corr_coeff = 0
-	!corr_coeff_limit = 0.001d0
-	max_timestep = 8.000d7
+	newton_itermin_until_reduce_min_corr_coeff = 0
+	corr_coeff_limit = 0.001d0
 	scale_max_correction = 0.1
 
 ! time controls
 	varcontrol_target = 8d-5
-	max_age = 19.985962431884484 	! age at end
+	max_age = 89.936830943480189 	! age at end
 	num_adjusted_dt_steps_before_max_age = 5
 
 ! output options
@@ -101,6 +134,5 @@ set_initial_omega = .true.
 ! debugging_controls
 	report_hydro_solver_progress = .true.
 	tiny_corr_coeff_limit = 50000	
-        steps_before_use_gold_tolerances = 10000000
 
 / ! end of controls namelist

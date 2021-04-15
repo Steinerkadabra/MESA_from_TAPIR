@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export MESA_DIR=~/mesa-r12778
+export MESA_DIR=~/MESA/mesa-r12778
 export OMP_NUM_THREADS=16
 export MESASDK_ROOT=~/mesasdk
 source $MESASDK_ROOT/bin/mesasdk_init.sh
