@@ -386,7 +386,7 @@ subroutine energy_routine(id, ierr)
          extras_finish_step = keep_going
 
          open (unit = 14, file = "MESA_for_TAPIR.txt")
-         write(unit=14, fmt="(F28.15)") s% Teff, s% star_age
+         write(unit=14, fmt="(F28.15)") s% Teff, s% star_age, s% r(1), s% photosphere_L, Lacc
          close (unit = 14)
 
 

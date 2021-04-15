@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export MESA_DIR=~/MESA/mesa-r12778
+export MESA_DIR=~/mesa-r12778
 export OMP_NUM_THREADS=16
 export MESASDK_ROOT=~/mesasdk
 source $MESASDK_ROOT/bin/mesasdk_init.sh
@@ -11,6 +11,7 @@ sed -i "s/<<start_rate>>/$1/" inlist_project
 sed -i "s/<<end_rate>>/$2/" inlist_project
 sed -i "s/<<start_time>>/$3/" inlist_project
 sed -i "s/<<end_time>>/$4/" inlist_project
+sed -i "s/<<rot_omega>>/$5/" inlist_project
 
 if (( $(echo "0.001 > $3" |bc -l) ));
 then

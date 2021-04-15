@@ -1,5 +1,5 @@
 program hello
-    real(8) :: MESA_Teff, MESA_end_time
+    real(8) :: MESA_Teff, MESA_end_time, MESA_omega
     real(kind=8), allocatable, dimension(:) :: time, rate
     integer :: nlines, i, ierr
 
@@ -33,28 +33,33 @@ program hello
          rate(i) = rate(i)/1.9892d33*3.1558149984d7
     end do
 
+
+    !Set MESA_omega to a constant value (6 days) for this test...
+    MESA_omega = 1.2120342d-5
+
     do i = 1, nlines-2
 	ierr = 0
 	
-	if (time(i) > 205195.87628815800) then
+	!if (time(i) > 205195.87628815800) then
 	 
         write(*,*) 'start_time', time(i), 'end_time', time(i+1), 'start_rate', rate(i), 'end_rate', rate(i+1)
-        call start_MESA(rate(i), rate(i+1) , time(i), time(i+1), MESA_Teff, MESA_end_time, ierr)
+        call start_MESA(rate(i), rate(i+1) , time(i), time(i+1), MESA_Teff, MESA_end_time, MESA_omega, ierr)
         write(*,*) 'resulting MESA Teff:', MESA_Teff
-        end if
+        !end if
 	if (ierr == 1) STOP "MESA has not reached end time"
     end do
 end program
 
 
-subroutine start_MESA(start_rate, end_rate, start_time, end_time, MESA_Teff, MESA_end_time, ierr)
-    real(8), intent(in) :: start_rate, end_rate, start_time, end_time
+subroutine start_MESA(start_rate, end_rate, start_time, end_time, MESA_Teff, MESA_end_time, MESA_omega, ierr)
+    real(8), intent(in) :: start_rate, end_rate, start_time, end_time, MESA_omega
     real(8), intent(out) :: MESA_Teff, MESA_end_time
     integer, intent(out) :: ierr
     character(len = 300) :: run_string
-    character(len=26) :: start_rate_str, end_rate_str, start_time_str, end_time_str
+    character(len=26) :: start_rate_str, end_rate_str, start_time_str, end_time_str, omega_str
     character(len=10) :: rn_tapir
     character(len=12) :: output_file
+    real(8) :: MESA_rad, MESA_lum, MESA_lumacc
 
     ierr = 0
     rn_tapir = './rn_tapir'
@@ -64,8 +69,9 @@ subroutine start_MESA(start_rate, end_rate, start_time, end_time, MESA_Teff, MES
     write(end_rate_str , *) end_rate
     write(start_time_str , *) start_time
     write(end_time_str , *) end_time
+    write(omega_str , *) MESA_omega
 
-    run_string = rn_tapir//start_rate_str//end_rate_str//start_time_str//end_time_str//output_file
+    run_string = rn_tapir//start_rate_str//end_rate_str//start_time_str//end_time_str//omega_str//output_file
 
     call execute_command_line(run_string, wait = .true.)
 

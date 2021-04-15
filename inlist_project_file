@@ -32,6 +32,12 @@
 	pgstar_flag = .false.
 	show_log_description_at_start = .false.
 
+! set current stellar rotation
+
+new_omega = <<rot_omega>>
+set_omega = .true.
+set_initial_omega = .true.
+
 	
 / !end of star_job namelist
 
@@ -63,7 +69,7 @@
 	x_ctrl(4) = <<end_rate>>		! accretion rate at end
 	x_ctrl(5) = 0.01 				! control for linear change of energy
 	x_ctrl(6) = <<start_time>> 		! age at start
-	x_ctrl(7) = <<end_time>> 	! age at end
+	x_ctrl(7) = <<end_time>> 	        ! age at end
 
 	use_other_energy = .true.
 	use_other_adjust_mdot = .true.
@@ -77,6 +83,7 @@
 	!conv_vel_corr_coeff_limit = 0.002d0
 	!newton_itermin_until_reduce_min_corr_coeff = 0
 	!corr_coeff_limit = 0.001d0
+	max_timestep = 8.000d7
 	scale_max_correction = 0.1
 
 ! time controls
