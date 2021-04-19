@@ -12,6 +12,11 @@
 	saved_model_name = 'model_0.940'
   	save_photo_when_terminate = .true.
 
+! change form lnd to lnPgas
+	change_lnPgas_flag = .true.
+	new_lnPgas_flag = .true.
+
+	
 ! Opacity controls
 	kappa_file_prefix = 'OP_a09_nans_removed_by_hand'
 
@@ -108,6 +113,7 @@
 
 !convergence controls
 
+	max_resid_jump_limit = 1d99
 	tiny_corr_coeff_limit = 5000
 	timestep_factor_for_retries = 0.9
 	timestep_factor_for_backups = 0.9
