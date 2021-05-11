@@ -71,19 +71,19 @@
          s% how_many_extra_profile_header_items => how_many_extra_profile_header_items
          s% data_for_extra_profile_header_items => data_for_extra_profile_header_items
 
+
          s% job% initial_h2 = s% x_ctrl(1)*1d-6
          s% job% initial_he3 = s% x_ctrl(2)*1d-6
-         s% job% initial_he4 = 0.224 + 2*s% initial_z - s% x_ctrl(2)*1d-6
-         s% initial_y = 0.224 + 2*s% initial_z 
+         s% job% initial_he4 = 0.276 - s% x_ctrl(2)*1d-6
+         s% initial_y = 0.276
          s% job% initial_h1 = 1 - s% job% initial_h2 - s% job% initial_he3 -s% job% initial_he4 - s % initial_z
 
          s% accretion_h2 = s% x_ctrl(1)*1d-6
          s% accretion_he3 = s% x_ctrl(2)*1d-6
-         s% accretion_he4 = 0.224 + 2*s% initial_z - s% x_ctrl(2)*1d-6
+         s% accretion_he4 = 0.276 - s% x_ctrl(2)*1d-6
          s% accretion_h1 = 1 - s% job% initial_h2 - s% job% initial_he3 -s% job% initial_he4 - s % initial_z
 
 
-         s% xa_central_lower_limit(1) = s% job% initial_h1 - 0.001
 
       end subroutine extras_controls
       
@@ -121,11 +121,10 @@ subroutine energy_routine(id, ierr)
          real(dp) :: xposk, dif, xpos, thingie, thingie2, Mstar, mass_dif
          integer :: k, xposk_orig
 
-         ! values from jensen & haugbolle 2017
-            real(dp), parameter :: mdot_break = 3.5*1d-5
-            real(dp), parameter :: alpha_high = 0.5
+            real(dp), parameter :: mdot_break = 6.2e-6
+            real(dp), parameter :: alpha_high = 0.2
             real(dp), parameter :: alpha_low = 0.005
-            real(dp), parameter :: delta_break = 2/3*1d-5
+            real(dp), parameter :: delta_break = 5.95e-6
             real(dp) :: numerator, denominator
 
 
@@ -135,17 +134,18 @@ subroutine energy_routine(id, ierr)
             mass = s% mstar
             mdot = s% mstar_dot
             mdot_msun = s% mstar_dot / Msun* secyer
-            !numerator = alpha_high * exp(mdot_msun/delta_break) + alpha_low * exp(mdot_msun/delta_break)
-            !denominator = exp(mdot_msun/delta_break) + exp(mdot_msun/delta_break)
+            numerator = alpha_low * exp(mdot_break/delta_break) + alpha_high * exp(mdot_msun/delta_break)
+            denominator = exp(mdot_break/delta_break) + exp(mdot_msun/delta_break)
 
-            !alpha = numerator / denominator
-            !set constant alpha for now, should change that later on
+            alpha = numerator / denominator
+  
+            write(*,*) "Alpha is set to", alpha, denominator, numerator, mdot_msun
 
-            alpha = 0.1
 
 
             mass = s% mstar
             mdot = s% mstar_dot
+
 
             if (mdot == 0.) return
 
@@ -154,17 +154,12 @@ subroutine energy_routine(id, ierr)
             mcumul = 0.
             k = 0
             Lacc = 0.5 * (standard_cgrav * (s% mstar_dot) * (mass)) / radius
-
-            !Ladd = min(1.0, float(s% model_number)/1000.)*alpha/2*standard_cgrav * (s% star_mass *Msun) * (s% mstar_dot) / (s% r(1)) ![erg/s]
             Ladd = alpha/2*standard_cgrav * (s% star_mass *Msun) * (s% mstar_dot) / (s% r(1)) ![erg/s]
             Lacc =  safe_log10((1-alpha)/2*standard_cgrav * (s% star_mass *Msun) *&
-     (s% mstar_dot) / (s% r(1))  /Lsun) ![erg/s]
-      Mstar=(s% star_mass *Msun) ![g]
+                     (s% mstar_dot) / (s% r(1))  /Lsun) ![erg/s]
+            Mstar=(s% star_mass *Msun) ![g]
 
-       !do while ((Ladd / max(mcumul,1.) > 1d3) .and. mcumul < 0.8 * mass)
-         !   k = k + 1
-         !   mcumul = mcumul + s% dm(k)
-         !enddo
+
    
   xpos = s% x_ctrl(5)
   do k = 1, s% nz
@@ -174,8 +169,13 @@ subroutine energy_routine(id, ierr)
             end if
          end do
 
+
+
+
+
   
        end subroutine energy_routine
+
 
 
 
