@@ -26,6 +26,7 @@
       use star_def
       use const_def
       use math_lib
+      use utils_lib, only: is_bad
       
       implicit none
       

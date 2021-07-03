@@ -9,7 +9,7 @@
 
   ! create model
   	load_saved_model = .true.
-	saved_model_name = 'model_0.940'
+	saved_model_name = 'solarz_0day'
   	save_photo_when_terminate = .true.
 
 ! change form lnd to lnPgas
@@ -70,7 +70,7 @@
 ! mixing controls
 	set_min_D_mix = .true.
 	min_D_mix = 0d0
-	mixing_length_alpha = 2.0 !1.8   
+	mixing_length_alpha = 2.2 !1.8   
 	overshoot_scheme(1) = 'exponential'
 	overshoot_zone_type(1) = 'any'
 	overshoot_zone_loc(1) = 'any'
@@ -110,6 +110,31 @@
 	am_D_mix_factor = 0.03333333d0
 	set_uniform_am_nu_non_rot = .true.
 	uniform_am_nu_non_rot = 1d33
+
+	mlt_use_rotation_correction = .true.
+	okay_to_reduce_gradT_excess = .true.
+	Pextra_factor = 2.0d0
+
+!rotational mixing if applicable
+	D_SH_factor =  1.0d0
+	D_SSI_factor = 1.0d0
+	D_ES_factor =  1.0d0
+	D_GSF_factor = 1.0d0
+	D_DSI_factor = 1.0d0
+	D_ST_factor = 0.0d0
+
+	am_gradmu_factor = 0.05d0
+
+	
+    ! Fixing the position of the Lagrangian region of the mesh helps
+  ! convergence near the Eddington limit
+  max_logT_for_k_below_const_q = 100
+  max_q_for_k_below_const_q = 0.995
+  min_q_for_k_below_const_q = 0.995
+  max_logT_for_k_const_mass = 100
+  max_q_for_k_const_mass = 0.99
+  min_q_for_k_const_mass = 0.99
+  fix_eps_grav_transition_to_grid = .true.
 
 !convergence controls
 
